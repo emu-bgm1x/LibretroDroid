@@ -64,6 +64,8 @@ add_library(libretrodroid SHARED
         rumble.cpp
         rumblestate.h
         rumblestate.cpp
+        sensors.h
+        sensors.cpp
         utils/javautils.h
         utils/javautils.cpp
         utils/utils.cpp

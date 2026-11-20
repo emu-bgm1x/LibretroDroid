@@ -34,6 +34,7 @@
 #include "fpssync.h"
 #include "input.h"
 #include "rumble.h"
+#include "sensors.h"
 #include "shadermanager.h"
 #include "utils/javautils.h"
 #include "environment.h"
@@ -217,6 +218,7 @@ void LibretroDroid::onSurfaceCreated() {
     );
 
     video = std::unique_ptr<Video>(newVideo);
+    video->updateStretch(stretch);
 
     if (Environment::getInstance().getHwContextReset() != nullptr) {
         Environment::getInstance().getHwContextReset()();
@@ -415,6 +417,7 @@ void LibretroDroid::destroy() {
 
     core->retro_unload_game();
     core->retro_deinit();
+    Sensors::getInstance().deinit();
 
     video = nullptr;
     core = nullptr;
@@ -648,6 +651,14 @@ void LibretroDroid::setViewportAlignment(unsigned int viewportAlignment) {
 
     if (video) {
         this->video->updateViewportAlignment(viewportAlignment);
+    }
+}
+
+void LibretroDroid::setStretch(bool stretch) {
+    this->stretch = stretch;
+
+    if (video) {
+        this->video->updateStretch(stretch);
     }
 }
 

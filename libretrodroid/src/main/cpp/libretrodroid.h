@@ -133,6 +133,8 @@ public:
     void setShaderConfig(ShaderManager::Config shaderConfig);
 
     void setViewportAlignment(unsigned int viewportAlignment);
+    // ff-bgm1x: 게임 화면을 비율 무시하고 영역에 늘이기
+    void setStretch(bool stretch);
 
     void resetGlobalVariables();
 
@@ -167,6 +169,7 @@ private:
 
     Rect viewportRect = Rect(0.0F, 0.0F, 1.0F, 1.0F);
     unsigned int viewportAlignment = V_ALIGN_CENTER;
+    bool stretch = false;
     float screenRefreshRate = 60.0;
     int openglESVersion = 2;
     bool skipDuplicateFrames = false;

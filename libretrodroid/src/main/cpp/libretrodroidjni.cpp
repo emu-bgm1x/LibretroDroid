@@ -35,6 +35,7 @@
 #include "fpssync.h"
 #include "input.h"
 #include "rumble.h"
+#include "sensors.h"
 #include "shadermanager.h"
 #include "utils/javautils.h"
 #include "errorcodes.h"
@@ -572,6 +573,15 @@ JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_setAudioEn
     LibretroDroid::getInstance().setAudioEnabled(enabled);
 }
 
+// ff-bgm1x: 센서 축을 화면 기준으로 바꾸기 위한 화면 회전 (Surface.ROTATION_0..3)
+JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_setScreenRotation(
+    JNIEnv* env,
+    jclass obj,
+    jint rotation
+) {
+    Sensors::getInstance().setScreenRotation(rotation);
+}
+
 JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_setShaderConfig(
     JNIEnv* env,
     jclass obj,
@@ -597,6 +607,21 @@ JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_setViewpor
         jint viewportAlignment
 ) {
     LibretroDroid::getInstance().setViewportAlignment(viewportAlignment);
+}
+
+JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_setStretch(
+    JNIEnv* env,
+    jclass obj,
+    jboolean stretch
+) {
+    LibretroDroid::getInstance().setStretch(stretch);
+}
+
+JNIEXPORT jfloat JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_getAspectRatio(
+    JNIEnv* env,
+    jclass obj
+) {
+    return LibretroDroid::getInstance().getAspectRatio();
 }
 
 JNIEXPORT void JNICALL Java_com_swordfish_libretrodroid_LibretroDroid_refreshAspectRatio(

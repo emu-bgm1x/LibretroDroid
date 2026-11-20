@@ -50,7 +50,7 @@ void VideoLayout::updateForegroundVertices() {
     float screenW = screenWidth * viewportRect.getWidth();
     float screenH = screenHeight * viewportRect.getHeight();
     float screenAspect = screenW / screenH;
-    float contentAspect = aspectRatio;
+    float contentAspect = stretch ? screenAspect : aspectRatio;
 
     float scaleX = viewportRect.getWidth();
     float scaleY = viewportRect.getHeight();
@@ -194,6 +194,11 @@ void VideoLayout::updateViewportAlignment(unsigned int viewportAlignment) {
     LOGD("Updated viewport alignment to : %d", viewportAlignment);
 
     this->viewportAlignment = viewportAlignment;
+    updateBuffers();
+}
+
+void VideoLayout::updateStretch(bool stretch) {
+    this->stretch = stretch;
     updateBuffers();
 }
 

@@ -244,6 +244,10 @@ void Video::updateViewportAlignment(unsigned int viewportAlignment) {
     videoLayout.updateViewportAlignment(viewportAlignment);
 }
 
+void Video::updateStretch(bool stretch) {
+    videoLayout.updateStretch(stretch);
+}
+
 void Video::updateRendererSize(unsigned int width, unsigned int height) {
     LOGD("Updating renderer size: %d x %d", width, height);
     renderer->updateRenderedResolution(width, height);
