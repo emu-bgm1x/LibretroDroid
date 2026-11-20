@@ -30,6 +30,7 @@
 #include "environment.h"
 #include "vfs/vfs.h"
 #include "microphone/microphoneinterface.h"
+#include "sensors.h"
 
 void Environment::initialize(
     const std::string &requiredSystemDirectory,
@@ -268,6 +269,13 @@ bool Environment::handle_callback_environment(unsigned cmd, void *data) {
         case RETRO_ENVIRONMENT_GET_RUMBLE_INTERFACE:
             LOGD("Called RETRO_ENVIRONMENT_GET_RUMBLE_INTERFACE");
             ((struct retro_rumble_interface*) data)->set_rumble_state = &callback_set_rumble_state;
+            return true;
+
+        // ff-bgm1x: 휴대폰 센서 (가속도, 자이로, 조도)
+        case RETRO_ENVIRONMENT_GET_SENSOR_INTERFACE:
+            LOGD("Called RETRO_ENVIRONMENT_GET_SENSOR_INTERFACE");
+            ((struct retro_sensor_interface*) data)->set_sensor_state = &libretrodroid::Sensors::callbackSetSensorState;
+            ((struct retro_sensor_interface*) data)->get_sensor_input = &libretrodroid::Sensors::callbackGetSensorInput;
             return true;
 
         case RETRO_ENVIRONMENT_GET_LOG_INTERFACE:

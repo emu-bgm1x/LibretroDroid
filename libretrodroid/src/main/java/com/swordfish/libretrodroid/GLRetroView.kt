@@ -71,6 +71,16 @@ class GLRetroView(
         LibretroDroid.setViewportAlignment(value.value)
     }
 
+    // ff-bgm1x: true 면 게임 비율을 무시하고 viewport 전체에 늘인다
+    var stretch: Boolean by Delegates.observable(false) { _, _, value ->
+        runOnEmulationThread(true) {
+            LibretroDroid.setStretch(value)
+        }
+    }
+
+    // ff-bgm1x: 게임 화면 비율 (가로/세로). 게임을 불러오기 전에는 기본값
+    fun getContentAspectRatio(): Float = LibretroDroid.getAspectRatio()
+
     private val openGLESVersion: Int
 
     private var isGameLoaded = false
@@ -171,6 +181,15 @@ class GLRetroView(
     fun setCheat(index: Int, enable: Boolean, code: String, useEmulationThread: Boolean = true) {
         runOnEmulationThread(useEmulationThread) {
             LibretroDroid.setCheat(index, enable, code)
+        }
+    }
+
+    // ff-bgm1x: 치트를 모두 지우고 주어진 코드만 다시 건다.
+    // 한 작업 안에서 하므로 지우고 다시 거는 사이에 게임 프레임이 돌지 않는다.
+    fun applyCheats(codes: List<String>, useEmulationThread: Boolean = true) {
+        runOnEmulationThread(useEmulationThread) {
+            LibretroDroid.resetCheat()
+            codes.forEachIndexed { index, code -> LibretroDroid.setCheat(index, true, code) }
         }
     }
 
@@ -328,6 +347,10 @@ class GLRetroView(
         override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) = catchExceptions {
             Thread.currentThread().priority = Thread.MAX_PRIORITY
             LibretroDroid.onSurfaceChanged(width, height)
+            // ff-bgm1x: 화면이 회전하면 표면 크기가 바뀌므로 여기서 회전을 알려 준다 (센서 축 변환)
+            @Suppress("DEPRECATION")
+            val rotation = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.rotation
+            LibretroDroid.setScreenRotation(rotation)
         }
 
 

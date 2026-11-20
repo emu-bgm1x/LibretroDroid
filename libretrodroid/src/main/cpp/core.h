@@ -50,6 +50,13 @@ public:
     void (*retro_set_input_poll)(retro_input_poll_t);
     void (*retro_set_input_state)(retro_input_state_t);
 
+    // ff-bgm1x: 수정한 mGBA 코어만 가진 함수 (없으면 nullptr)
+    void (*ff_bgm1x_mix)(int16_t* stereo, int frames, int sampleRate) = nullptr;
+    bool (*ff_bgm1x_speed_hold)(void) = nullptr;
+    // ff-bgm1x 소리 분류 (있는 코어만): 문자열 명령, 분류 화면의 재생 소리
+    const char* (*ff_catalog_command)(const char* cmd) = nullptr;
+    int (*ff_preview_render)(int16_t* stereo, int frames, int sampleRate) = nullptr;
+
     Core(const std::string& soCorePath);
     ~Core();
 

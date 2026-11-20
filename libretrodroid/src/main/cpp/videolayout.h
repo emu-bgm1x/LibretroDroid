@@ -40,6 +40,9 @@ public:
 
     void updateViewportAlignment(unsigned int viewportAlignment);
 
+    // ff-bgm1x: 게임 비율을 무시하고 영역 전체에 늘인다
+    void updateStretch(bool stretch);
+
     void updateRotation(float rotation);
 
     std::array<float, 12>& getForegroundVertices() { return foregroundVertices; }
@@ -160,6 +163,7 @@ private:
     unsigned screenHeight = 0;
 
     unsigned viewportAlignment = V_ALIGN_CENTER;
+    bool stretch = false;
 };
 
 } // namespace libretrodroid

@@ -19,6 +19,7 @@
 #define LIBRETRODROID_AUDIO_H
 
 #include <array>
+#include <mutex>
 #include <unistd.h>
 #include <oboe/Oboe.h>
 #include <oboe/FifoBuffer.h>
@@ -56,6 +57,10 @@ public:
     void write(const int16_t *data, size_t frames);
     void setPlaybackSpeed(const double newPlaybackSpeed);
 
+    // ff-bgm1x: 출력 직전의 버퍼에 소리를 더하는 함수 (배속과 무관한 1배속 소리)
+    using PostMix = void (*)(int16_t* stereo, int frames, int sampleRate);
+    void setPostMix(PostMix mix);
+
 private:
     static int32_t roundToEven(int32_t x);
     double computeDynamicBufferConversionFactor(double dt);
@@ -87,6 +92,10 @@ private:
     double errorIntegral = 0.0;
 
     double playbackSpeed = 1.0;
+
+    // setPostMix(nullptr) 가 돌아오면 그 뒤로는 postMix 를 부르지 않는다 (코어를 닫기 전에 쓴다)
+    std::mutex postMixMutex;
+    PostMix postMix = nullptr;
 
     std::unique_ptr<AudioLatencySettings> audioLatencySettings;
 };
